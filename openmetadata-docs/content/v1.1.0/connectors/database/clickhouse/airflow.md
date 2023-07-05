@@ -149,6 +149,25 @@ This is a sample config for Clickhouse:
 
 {% /codeInfo %}
 
+{% codeInfo srNumber=40 %}
+
+**https**: Enable this flag when the when the Clickhouse instance is hosted via HTTPS protocol. This flag is useful when you are using `clickhouse+http` connection scheme.
+
+{% /codeInfo %}
+
+
+{% codeInfo srNumber=41 %}
+
+**secure**: Establish secure connection with ClickHouse. ClickHouse supports secure communication over SSL/TLS to protect data in transit, by checking this option, it establishes secure connection with ClickHouse. This flag is useful when you are using `clickhouse+native` connection scheme.
+
+{% /codeInfo %}
+
+{% codeInfo srNumber=42 %}
+
+**keyfile**: The key file path is the location when ClickHouse looks for a file containing the private key needed for secure communication over SSL/TLS. By default, ClickHouse will look for the key file in the `/etc/clickhouse-server directory`, with the file name `server.key`. However, this can be customized in the ClickHouse configuration file (`config.xml`). This flag is useful when you are using `clickhouse+native` connection scheme and the secure connection flag is enabled.
+
+{% /codeInfo %}
+
 
 
 
@@ -224,6 +243,15 @@ source:
 ```
 ```yaml {% srNumber=6 %}
       # scheme: clickhouse+http (default), or clickhouse+native
+```
+```yaml {% srNumber=40 %}
+      # https: false
+```
+```yaml {% srNumber=41 %}
+      # secure: true
+```
+```yaml {% srNumber=42 %}
+      # keyfile: /etc/clickhouse-server/server.key
 ```
 ```yaml {% srNumber=7 %}
       # connectionOptions:
