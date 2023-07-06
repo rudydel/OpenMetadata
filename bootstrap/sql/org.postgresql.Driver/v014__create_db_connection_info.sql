@@ -21,3 +21,8 @@ CREATE TABLE IF NOT EXISTS data_product_entity (
     PRIMARY KEY (id),
     UNIQUE (fqnHash)
 );
+
+-- remove keyfile from clickhouse 
+UPDATE dbservice_entity 
+SET json = json #-'{connection,config,keyfile}' 
+WHERE serviceType = 'Clickhouse';
