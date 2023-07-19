@@ -45,7 +45,6 @@ import javax.json.JsonPatch;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
-import org.jdbi.v3.sqlobject.transaction.Transaction;
 import org.openmetadata.common.utils.CommonUtil;
 import org.openmetadata.schema.EntityInterface;
 import org.openmetadata.schema.api.data.CreateTableProfile;
@@ -75,6 +74,7 @@ import org.openmetadata.schema.type.TaskType;
 import org.openmetadata.service.Entity;
 import org.openmetadata.service.exception.CatalogExceptionMessage;
 import org.openmetadata.service.exception.EntityNotFoundException;
+import org.openmetadata.service.jdbi3.unitofwork.JdbiUnitOfWork;
 import org.openmetadata.service.resources.databases.DatabaseUtil;
 import org.openmetadata.service.resources.databases.TableResource;
 import org.openmetadata.service.resources.feeds.MessageParser.EntityLink;
@@ -178,7 +178,7 @@ public class TableRepository extends EntityRepository<Table> {
     return FullyQualifiedName.buildHash(entity.getFullyQualifiedName());
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table addJoins(UUID tableId, TableJoins joins) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -210,7 +210,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table.withJoins(getJoins(table));
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table addSampleData(UUID tableId, TableData tableData) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -235,7 +235,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table.withSampleData(tableData);
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table getSampleData(UUID tableId, boolean authorizePII) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -257,7 +257,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table deleteSampleData(UUID tableId) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -267,14 +267,14 @@ public class TableRepository extends EntityRepository<Table> {
     return table;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public TableProfilerConfig getTableProfilerConfig(Table table) throws IOException {
     return JsonUtils.readValue(
         daoCollection.entityExtensionDAO().getExtension(table.getId().toString(), TABLE_PROFILER_CONFIG_EXTENSION),
         TableProfilerConfig.class);
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public TestSuite getTestSuite(Table table) throws IOException {
     List<CollectionDAO.EntityRelationshipRecord> entityRelationshipRecords =
         daoCollection.relationshipDAO().findTo(table.getId().toString(), TABLE, Relationship.CONTAINS.ordinal());
@@ -287,7 +287,7 @@ public class TableRepository extends EntityRepository<Table> {
         : null;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table addTableProfilerConfig(UUID tableId, TableProfilerConfig tableProfilerConfig) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -320,7 +320,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table.withTableProfilerConfig(tableProfilerConfig);
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table deleteTableProfilerConfig(UUID tableId) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -351,7 +351,7 @@ public class TableRepository extends EntityRepository<Table> {
     return null;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table addTableProfileData(UUID tableId, CreateTableProfile createTableProfile) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -410,7 +410,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table.withProfile(createTableProfile.getTableProfile());
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public void deleteTableProfile(String fqn, String entityType, Long timestamp) throws IOException {
     // Validate the request content
     String extension;
@@ -430,7 +430,7 @@ public class TableRepository extends EntityRepository<Table> {
     deleteExtensionAtTimestamp(fqn, extension, timestamp);
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public ResultList<TableProfile> getTableProfiles(String fqn, Long startTs, Long endTs) throws IOException {
     List<TableProfile> tableProfiles;
     tableProfiles =
@@ -439,7 +439,7 @@ public class TableRepository extends EntityRepository<Table> {
     return new ResultList<>(tableProfiles, startTs.toString(), endTs.toString(), tableProfiles.size());
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public ResultList<ColumnProfile> getColumnProfiles(String fqn, Long startTs, Long endTs) throws IOException {
     List<ColumnProfile> columnProfiles;
     columnProfiles =
@@ -448,7 +448,7 @@ public class TableRepository extends EntityRepository<Table> {
     return new ResultList<>(columnProfiles, startTs.toString(), endTs.toString(), columnProfiles.size());
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public ResultList<SystemProfile> getSystemProfiles(String fqn, Long startTs, Long endTs) throws IOException {
     List<SystemProfile> systemProfiles;
     systemProfiles =
@@ -470,7 +470,7 @@ public class TableRepository extends EntityRepository<Table> {
     }
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table getLatestTableProfile(String fqn, boolean authorizePII) throws IOException {
     Table table = dao.findEntityByName(fqn);
     TableProfile tableProfile =
@@ -489,7 +489,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table addCustomMetric(UUID tableId, CustomMetric customMetric) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -527,7 +527,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table deleteCustomMetric(UUID tableId, String columnName, String metricName) throws IOException {
     // Validate the request content
     Table table = dao.findEntityById(tableId);
@@ -562,7 +562,7 @@ public class TableRepository extends EntityRepository<Table> {
     return table;
   }
 
-  @Transaction
+  @JdbiUnitOfWork
   public Table addDataModel(UUID tableId, DataModel dataModel) throws IOException {
     Table table = dao.findEntityById(tableId);
     table.withDataModel(dataModel);
