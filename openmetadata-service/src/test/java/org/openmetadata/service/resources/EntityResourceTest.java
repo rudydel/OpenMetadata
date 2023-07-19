@@ -220,9 +220,9 @@ public abstract class EntityResourceTest<T extends EntityInterface, K extends Cr
   protected final boolean supportsOwner;
   protected final boolean supportsTags;
   protected boolean supportsPatch = true;
-  protected boolean supportsSoftDelete;
+  protected final boolean supportsSoftDelete;
   protected boolean supportsFieldsQueryParam = true;
-  protected boolean supportsEmptyDescription = true;
+  protected final boolean descriptionRequired;
 
   // Special characters supported in the entity name
   protected String supportedNameCharacters = "_'-.&()" + RANDOM_STRING_GENERATOR.generate(1);
@@ -382,6 +382,7 @@ public abstract class EntityResourceTest<T extends EntityInterface, K extends Cr
     this.allFields = fields;
     ENTITY_RESOURCE_TEST_MAP.put(entityType, this);
     Set<String> allowedFields = Entity.getEntityFields(entityClass);
+    this.descriptionRequired = EntityUtil.isDescriptionRequired(entityClass);
     this.supportsFollowers = allowedFields.contains(FIELD_FOLLOWERS);
     this.supportsOwner = allowedFields.contains(FIELD_OWNER);
     this.supportsTags = allowedFields.contains(FIELD_TAGS);
@@ -451,7 +452,7 @@ public abstract class EntityResourceTest<T extends EntityInterface, K extends Cr
   }
 
   public final K createRequest(String name, String description, String displayName, EntityReference owner) {
-    if (!supportsEmptyDescription && description == null) {
+    if (descriptionRequired && description == null) {
       throw new IllegalArgumentException("Entity " + entityType + " does not support empty description");
     }
     return createRequest(name)
@@ -862,7 +863,7 @@ public abstract class EntityResourceTest<T extends EntityInterface, K extends Cr
   @Execution(ExecutionMode.CONCURRENT)
   void post_entityWithMissingDescription_400(TestInfo test) {
     // Post entity that does not accept empty description and expect failure
-    if (supportsEmptyDescription) {
+    if (!descriptionRequired) {
       return;
     }
 
@@ -1175,7 +1176,7 @@ public abstract class EntityResourceTest<T extends EntityInterface, K extends Cr
   @Test
   @Execution(ExecutionMode.CONCURRENT)
   void put_entityNullDescriptionUpdate_200(TestInfo test) throws IOException {
-    if (!supportsEmptyDescription) {
+    if (descriptionRequired) {
       return;
     }
     // Create entity with null description
@@ -1207,12 +1208,12 @@ public abstract class EntityResourceTest<T extends EntityInterface, K extends Cr
   @Execution(ExecutionMode.CONCURRENT)
   protected void put_entityNonEmptyDescriptionUpdate_200(TestInfo test) throws IOException {
     // Create entity with non-empty description
-    K request = createRequest(getEntityName(test), supportsEmptyDescription ? null : "description", null, null);
+    K request = createRequest(getEntityName(test), descriptionRequired ? "description" : null, null, null);
     T entity = createAndCheckEntity(request, ADMIN_AUTH_HEADERS);
     // BOT user can update empty description and empty displayName
     ChangeDescription change = getChangeDescription(entity.getVersion());
     request.withDescription("description").withDisplayName("displayName");
-    if (supportsEmptyDescription) {
+    if (!descriptionRequired) {
       fieldAdded(change, "description", "description");
     }
     fieldAdded(change, "displayName", "displayName");
