@@ -155,7 +155,7 @@ This is a sample config for Snowflake:
 
 {% codeInfo srNumber=39 %}
 
-**clientSessionKeepAlive**: Optional Configuration to keep the session active in case the ingestion job runs for longer duration. 
+**clientSessionKeepAlive**: Optional Configuration to keep the session active in case the ingestion job runs for a longer duration. 
 
 {% /codeInfo %}
 

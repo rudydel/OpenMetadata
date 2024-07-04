@@ -1519,7 +1519,7 @@
     "hex-code-placeholder": "בחר או הזן קוד צבע HEX.",
     "hex-color-validation": "הקלט אינו קוד HEX תקין.",
     "hi-user-welcome-to": "שלום {{user}}, ברוך הבא אל",
-    "import-entity-help": "חסוך זמן ומאמץ על ידי העלאת קובץ CSV עם מספר {{entity}} בפעם אחת.",
+    "import-entity-help": "חסוך זמן ומאמץ על ידי העלאת קובץ CSV עם מספר {{entityPlural}} בפעם אחת.",
     "in-this-database": "במסד נתונים זה",
     "include-assets-message": "הפעל את החילוץ של {{assets}} ממקור הנתונים.",
     "include-database-filter-extra-information": "מסד הנתונים שנוסף בעת יצירת השירות.",

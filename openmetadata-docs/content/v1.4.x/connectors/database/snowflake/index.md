@@ -113,7 +113,7 @@ Make sure to add the `GRANT <USAGE|OWNERSHIP> ON PROCEDURE <NAME>(<SIGNATURE>) t
 - **Snowflake Passphrase Key (Optional)**: If you have configured the encrypted key pair authentication for the given user you will have to pass the paraphrase associated with the private key in this field. You can checkout [this](https://docs.snowflake.com/en/user-guide/key-pair-auth) doc to get more details about key-pair authentication.
 - **Include Temporary and Transient Tables**: 
 Optional configuration for ingestion of `TRANSIENT` and `TEMPORARY` tables, By default, it will skip the `TRANSIENT` and `TEMPORARY` tables.
-- **Client Session Keep Alive**: Optional Configuration to keep the session active in case the ingestion job runs for longer duration.
+- **Client Session Keep Alive**: Optional Configuration to keep the session active in case the ingestion job runs for a longer duration.
 
 {% partial file="/v1.4/connectors/database/advanced-configuration.md" /%}
 

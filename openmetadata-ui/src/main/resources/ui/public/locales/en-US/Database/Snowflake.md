@@ -154,7 +154,7 @@ $$
 $$section
 ### Client Session Keep Alive $(id="clientSessionKeepAlive")
 
-Optional Configuration to keep the session active in case the ingestion job runs for longer duration. 
+Optional Configuration to keep the session active in case the ingestion job runs for a longer duration. 
 $$
 
 $$section

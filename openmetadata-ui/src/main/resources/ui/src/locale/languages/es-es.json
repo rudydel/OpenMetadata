@@ -1519,7 +1519,7 @@
     "hex-code-placeholder": "Seleccione o ingrese el código de color HEX.",
     "hex-color-validation": "La entrada no es un código HEX válido.",
     "hi-user-welcome-to": "Hola {{user}}, Bienvenido a",
-    "import-entity-help": "Ahorre tiempo y esfuerzo cargando un archivo CSV con varios {{entity}} de una vez.",
+    "import-entity-help": "Ahorre tiempo y esfuerzo cargando un archivo CSV con varios {{entityPlural}} de una vez.",
     "in-this-database": "En esta base de datos",
     "include-assets-message": "Configuración opcional para activar la ingestión de {{assets}}.",
     "include-database-filter-extra-information": "Base de datos que se agregó al crear el servicio.",
